@@ -1,0 +1,16 @@
+---
+- hosts: '{{ hosts }}'
+  remote_user: root
+  tasks:
+  - name: add crontab /etc/crontab
+    blockinfile:
+     block: "{{ lookup('file', '/root/ansible/ansible-script/template/add_crontab') }}"
+     dest: "{{ path }}"
+
+  - name: reload crontab [CentOS 7 and Fedora ]
+    systemd: state=reloaded name=crond
+    when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='7' or  ansible_distribution == "Fedora" and ansible_distribution_major_version =='24'
+
+  - name: reload crontab [CentOS 6]
+    service: state=reloaded name=crond
+    when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='6'

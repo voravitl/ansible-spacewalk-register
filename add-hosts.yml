@@ -1,0 +1,9 @@
+---
+- hosts: '{{ hosts }}'
+  remote_user: root
+  tasks:
+  - name: add hosts
+    blockinfile:
+     block: "{{ lookup('file', './template/add_hosts') }}"
+     dest: "/etc/hosts"
+     backup: yes
