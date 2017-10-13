@@ -1,5 +1,5 @@
 ---
-- hosts: '{{ hosts }}'
+- hosts: all
   vars:
      spacewalk_server: '{{ spacewalk_server }}'
   remote_user: root
