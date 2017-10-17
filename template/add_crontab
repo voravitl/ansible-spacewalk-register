@@ -1,0 +1,2 @@
+# Check in with spacewalk and restart osad every ~30 minute
+*/10 * * * * root sleep `expr ${RANDOM:0:2} / 2` ; service osad restart ; /usr/sbin/rhn_check ; /usr/sbin/rhn-profile-sync
