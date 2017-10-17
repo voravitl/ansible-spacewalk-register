@@ -4,7 +4,7 @@
   tasks:
   - name: add crontab /etc/crontab
     blockinfile:
-     block: "{{ lookup('file', '/root/ansible/ansible-script/template/add_crontab') }}"
+     block: "{{ lookup('file', './template/add_crontab') }}"
      dest: "{{ path }}"
 
   - name: reload crontab [CentOS 7 and Fedora ]
