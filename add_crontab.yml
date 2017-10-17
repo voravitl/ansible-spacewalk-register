@@ -5,7 +5,7 @@
   - name: add crontab /etc/crontab
     blockinfile:
      block: "{{ lookup('file', './template/add_crontab') }}"
-     dest: "{{ path }}"
+     dest:  "/etc/crontab"
 
   - name: reload crontab [CentOS 7 and Fedora ]
     systemd: state=reloaded name=crond
