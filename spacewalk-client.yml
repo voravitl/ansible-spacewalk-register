@@ -163,7 +163,7 @@
       state: absent
       username: "admin"
       password: "nDVJ^d6kzY@/P$!sn"
-    ignore_errors: yes
+     ignore_errors: yes
 
      
    - name: Register system to Spacewalk (CentOS 7 x86_64)
