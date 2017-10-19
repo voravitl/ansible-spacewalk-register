@@ -163,9 +163,7 @@
       state: absent
       username: "admin"
       password: "nDVJ^d6kzY@/P$!sn"
-    register: rhn_unregister_status
     ignore_errors: yes
-    when: rhn_unregister or rhn_register
 
      
    - name: Register system to Spacewalk (CentOS 7 x86_64)
@@ -173,7 +171,6 @@
      rhn_register:
        state: present
        server_url: https://"{{ spacewalk_server }}"/XMLRPC
-       force_register: yes
        activationkey: 1-centos7-x86_64
      when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='7' and ansible_userspace_architecture == 'x86_64'
 
