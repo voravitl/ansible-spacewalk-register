@@ -163,6 +163,7 @@
       state: absent
       username: "admin"
       password: "nDVJ^d6kzY@/P$!sn"
+      server_url: https://"{{ spacewalk_server }}"/XMLRPC
      ignore_errors: yes
 
      
