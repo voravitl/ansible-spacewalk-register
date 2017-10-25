@@ -158,13 +158,13 @@
      get_url: url=https://raw.githubusercontent.com/spacewalkproject/spacewalk/master/client/rhel/yum-rhn-plugin/actions/errata.py dest=/usr/share/rhn/actions/ validate_certs=no mode=755 validate_certs=no
      when: ansible_distribution == "Ubuntu"
 
-   - name: Un-Register to LSM Network First
-     rhn_register:
-      state: absent
-      username: "admin"
-      password: "nDVJ^d6kzY@/P$!sn"
-      server_url: https://{{ spacewalk_server }}/XMLRPC
-     ignore_errors: yes
+#   - name: Un-Register to LSM Network First
+#     rhn_register:
+#      state: absent
+#      username: "admin"
+#      password: "nDVJ^d6kzY@/P$!sn"
+#      server_url: https://{{ spacewalk_server }}/XMLRPC
+#     ignore_errors: yes
 
    - name: Register system to Spacewalk (CentOS 7 x86_64)
      shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-centos7-x86_64 --force
