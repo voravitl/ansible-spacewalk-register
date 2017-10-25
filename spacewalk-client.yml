@@ -166,13 +166,12 @@
       server_url: https://{{ spacewalk_server }}/XMLRPC
      ignore_errors: yes
 
-     
    - name: Register system to Spacewalk (CentOS 7 x86_64)
-     #     shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-centos7-x86_64 --force
-     rhn_register:
-       state: present
-       server_url: https://{{ spacewalk_server }}/XMLRPC
-       activationkey: 1-centos7-x86_64
+     shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-centos7-x86_64 --force
+     # rhn_register:
+     #  state: present
+     #  server_url: https://{{ spacewalk_server }}/XMLRPC
+     #  activationkey: 1-centos7-x86_64
      when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='7' and ansible_userspace_architecture == 'x86_64'
 
    - name: Register system to Spacewalk (CentOS 6 i386)
