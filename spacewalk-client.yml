@@ -1,0 +1,212 @@
+---
+- hosts: '{{ hosts }}'
+  vars:
+     spacewalk_server: '{{ spacewalk_server }}'
+  remote_user: root
+  tasks:
+   - name: Cleanup Package for CentOS
+     yum: state=removed name={{item}}
+     with_items:
+       - rhn-client-tools
+       - rhn-org-trusted-ssl-cert
+       - rhn-check
+       - rhn-setup
+       - rhnsd
+       - rhncfg-actions
+       - osad
+       - rhncfg
+       - rhncfg-client
+       - epel-release
+       - spacewalk-client-repo
+     when: ansible_distribution == "CentOS"
+     ignore_errors: yes
+
+   - name: Cleanup Package for Ubuntu 
+     apt: name="{{item}}" state=absent purge=yes force=yes autoremove=yes
+     with_items:
+       - apt-transport-spacewalk 
+       - rhnsd
+       - osad
+       - pyjabber
+     when: ansible_distribution == "Ubuntu"
+
+   - name: Clenaup Old Config
+     file: path='{{item}}' state=absent
+     with_items:
+       - /etc/apt/sources.list.d/spacewalk.list
+     when: ansible_distribution == "Ubuntu"
+   
+   - name: Install Package Spacewalk Clien for ubuntu
+     apt: deb="{{item}}" state=present update_cache=yes
+     with_items:
+       - https://launchpad.net/~mj-casalogic/+archive/ubuntu/spacewalk-ubuntu/+files/pyjabber_0.5.0-1.4ubuntu3~xenial2_all.deb
+       - https://launchpad.net/~mj-casalogic/+archive/ubuntu/spacewalk-ubuntu/+files/osad_5.11.27-1ubuntu1~xenial7_all.deb
+       - http://ftp.us.debian.org/debian/pool/main/r/rhn-client-tools/rhn-client-tools_2.3.5-1_amd64.deb
+       - http://ftp.us.debian.org/debian/pool/main/a/apt-spacewalk/apt-transport-spacewalk_1.0.6-4.1_all.deb
+       - http://ftp.us.debian.org/debian/pool/main/r/rhnlib/python-rhn_2.5.72-1_all.deb
+       - http://ftp.us.debian.org/debian/pool/main/p/python-ethtool/python-ethtool_0.12-1.1_amd64.deb
+       - http://ftp.us.debian.org/debian/pool/main/r/rhnsd/rhnsd_5.0.4-3+b1_amd64.deb
+     when: ansible_distribution == "Ubuntu" #and ansible_distribution_major_version =='14' and ansible_userspace_architecture == 'x86_64'
+ 
+   - name: Install repository Spacewalk-Client (CentOS  and Fedora )
+     yum: state=present name={{item}} disable_gpg_check=yes
+     with_items:
+       - epel-release
+       - yum-plugin-copr
+     when: ansible_distribution == "CentOS"  and ansible_distribution_major_version =='7' or ansible_distribution == "Fedora"
+
+   - name: Install epel-release and  (Centos)
+     yum: state=present name={{item}} disable_gpg_check=yes
+     with_items:
+       - epel-release
+     when: ansible_distribution == "CentOS"   and ansible_distribution_major_version =='6'
+
+#   - name: Install repository Spacewalk-Client (Centos 6)
+#     yum: state=present name={{item}} disable_gpg_check=yes
+#     with_items:
+#       - http://yum.spacewalkproject.org/2.7-client/RHEL/6/x86_64/spacewalk-client-repo-2.7-2.el6.noarch.rpm
+#     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '6'
+
+#   - name: Install repository Spacewalk-Client (Centos 7)
+#     yum: state=present name={{item}} disable_gpg_check=yes
+#     with_items:
+#       - http://yum.spacewalkproject.org/2.7-client/RHEL/7/x86_64/spacewalk-client-repo-2.7-2.el7.noarch.rpm
+#     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '7'
+
+   - name: Install repository Spacewalk-Client (CentOS 5 )
+     yum: state=present name={{item}} disable_gpg_check=yes
+     with_items:
+       - http://archives.fedoraproject.org/pub/archive/epel/epel-release-latest-5.noarch.rpm 
+       - http://yum.spacewalkproject.org/2.7-client/RHEL/5/x86_64/spacewalk-client-repo-2.7-2.el5.noarch.rpm
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '5'
+
+#   - name: Install repository Spacewalk-Client (Fedora 24 )
+#     yum: state=present name={{item}} disable_gpg_check=yes
+#     with_items:
+#       - http://yum.spacewalkproject.org/2.7-client/Fedora/26/x86_64/spacewalk-client-repo-2.7-2.fc26.noarch.rpm
+#     when: ansible_distribution == "Fedora" and ansible_distribution_major_version == '24'
+
+#   - name: Install Spacewalk nightly-client package
+#     shell: "yum -y copr enable @spacewalkproject/nightly-client"
+#     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '7' or ansible_distribution_major_version == '6'
+
+   - name: Install Spacewalk nightly-client package
+     shell: "dnf copr enable @spacewalkproject/nightly-client"
+     when: ansible_distribution == "Fedora"
+
+#   - name: Enable nightly repo
+#     lineinfile: dest="{{ item.dest }}" regexp="{{ item.regexp }}"  line="{{ item.line }}" state=present
+#     with_items:
+#       - { dest: '/etc/yum.repos.d/spacewalk-client.repo' ,regexp: 'enabled=1', line: 'enabled=0'}
+#       - { dest: '/etc/yum.repos.d/spacewalk-client-nightly.repo' ,regexp: 'enabled=0', line: 'enabled=1'}
+#     when: ansible_distribution == "CentOS"
+
+   - name: Clean matada yum
+     shell: yum clean all ; ntpdate -u ntp.vpls.net
+     when: ansible_distribution == "CentOS" or  ansible_distribution == "Fedora" 
+
+   - name: Install Package for (Fedora)
+     yum: state=latest name={{item}}
+     with_items:
+       - rhn-client-tools
+       - rhn-check
+       - rhn-setup
+       - rhnsd
+       - m2crypto
+       - rhncfg-actions
+       - osad
+       - rhncfg
+       - rhncfg-client
+       - dnf-plugin-spacewalk
+     when: ansible_distribution == "Fedora" 
+
+   - name: Install Package for (Centos)
+     yum: state=latest name={{item}}
+     with_items:
+       - rhn-client-tools
+       - rhn-check
+       - rhn-setup
+       - rhnsd
+       - m2crypto
+       - yum-rhn-plugin
+       - rhncfg-actions
+       - osad
+       - rhncfg
+       - rhncfg-client
+       - http://{{ spacewalk_server }}/pub/rhn-org-trusted-ssl-cert-1.0-2.noarch.rpm
+     when: ansible_distribution == "CentOS" #or ansible_distribution == "Fedora"
+
+   - name: Install KEY 
+     get_url: url=https://{{spacewalk_server}}/pub/RHN-ORG-TRUSTED-SSL-CERT dest=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT validate_certs=no
+
+   - name: Install Errata for Ubuntu 
+     get_url: url=https://raw.githubusercontent.com/spacewalkproject/spacewalk/master/client/rhel/yum-rhn-plugin/actions/errata.py dest=/usr/share/rhn/actions/ validate_certs=no mode=755 validate_certs=no
+     when: ansible_distribution == "Ubuntu"
+
+   - name: Register system to Spacewalk (CentOS 7 x86_64)
+     shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-centos7-x86_64 --force
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='7' and ansible_userspace_architecture == 'x86_64'
+
+   - name: Register system to Spacewalk (CentOS 6 i386)
+     shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-centos6-i386 --force
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='6' and ansible_userspace_architecture == 'i386'
+
+   - name: Register system to Spacewalk (CentOS 6 x86_64)
+     shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-centos6-x86_64 --force
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='6' and ansible_userspace_architecture == 'x86_64'
+   - name: Register system to Spacewalk (CentOS 5 i386)
+     shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-centos5-i386 --force
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='5' and ansible_userspace_architecture == 'i386'
+
+   - name: Register system to Spacewalk (CentOS 5 x86_64)
+     shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-centos5-x86_64 --force
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='5' and ansible_userspace_architecture == 'x86_64'
+
+
+   - name: Register system to Spacewalk (Fedora 24 x86_64)
+     shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-fedora24-x86_64 --force
+     when: ansible_distribution == "Fedora" and ansible_distribution_major_version =='24' and ansible_userspace_architecture == 'x86_64'
+
+   - name: Register system to Spacewalk (Ubuntu 14 x86_64)
+     shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-ubuntu-14.04-trusty-amd64 --force
+     when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='14' and ansible_userspace_architecture == 'x86_64'
+     ignore_errors: yes
+
+   - name: Register system to Spacewalk (Ubuntu 16 x86_64)
+     shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-ubuntu-16.04-xenial-amd64 --force
+     when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='16' and ansible_userspace_architecture == 'x86_64'
+
+   - name: Confing osad SSL CA CentOS
+     lineinfile: dest="{{ item.dest }}" regexp="{{ item.regexp }}" insertbefore="{{ item.insertbefore }}" line="{{ item.line }}" state=present
+     with_items:
+       - { dest: '/etc/yum/pluginconf.d/rhnplugin.conf' ,regexp: '^gpgcheck', insertbefore: '^gpgcheck' , line: 'gpgcheck = 0'}
+     when: ansible_distribution == "CentOS" 
+
+   - name: Confing osad SSL CA Fedora
+     lineinfile: dest="{{ item.dest }}" regexp="{{ item.regexp }}" insertbefore="{{ item.insertbefore }}" line="{{ item.line }}" state=present
+     with_items:
+       - { dest: '/etc/dnf/plugins/spacewalk.conf' ,regexp: '^gpgcheck', insertbefore: '^gpgcheck' , line: 'gpgcheck = 0'}
+     when: ansible_distribution == "Fedora"
+
+   - name: Confing osad SSL CA
+     lineinfile: dest="{{ item.dest }}" regexp="{{ item.regexp }}" insertbefore="{{ item.insertbefore }}" line="{{ item.line }}" state=present
+     with_items:
+       - { dest: '/etc/sysconfig/rhn/osad.conf' ,regexp: '^osa_ssl_cert', insertbefore: '^osa_ssl_cert' , line: 'osa_ssl_cert = /usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT'}
+
+   - name: Ignore auth from spacewalk (Ubuntu)
+     blockinfile:
+      block: "{{ lookup('file', '/root/ansible/ansible-script/template/50spacewalk') }}" 
+      dest: "/etc/apt/apt.conf.d/50spacewalk"
+     when: ansible_distribution == "Ubuntu"
+
+   - name: Start and enable osda [CentOS 7 and Fedora and Ubuntu 16]
+     systemd: state=restarted name=osad enabled=yes
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='7' or  ansible_distribution == "Fedora" and ansible_distribution_major_version =='24' or ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='16'
+
+   - name: Start and enable osad [CentOS 6 and Ubuntu 14]
+     service: state=restarted name=osad enabled=yes
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version <= '6' or ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='14' 
+
+   - name: Enable rhn-actions-control
+     shell: rhn-actions-control --enable-all
+when: ansible_distribution == "CentOS" or ansible_distribution == "Fedora"
