@@ -91,23 +91,23 @@
      yum: state=present name={{item}} disable_gpg_check=yes
      with_items:
        - http://archives.fedoraproject.org/pub/archive/epel/epel-release-latest-5.noarch.rpm 
-       - http://yum.spacewalkproject.org/2.6-client/RHEL/5/x86_64/spacewalk-client-repo-2.6-0.el5.noarch.rpm
+       - http://yum.spacewalkproject.org/2.7-client/RHEL/5/x86_64/spacewalk-client-repo-2.7-2.el5.noarch.rpm
      when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '5'
 
    - name: Install repository Spacewalk-Client (Fedora 24 )
      yum: state=present name={{item}} disable_gpg_check=yes
      with_items:
-       - http://yum.spacewalkproject.org/2.6-client/Fedora/24/x86_64/spacewalk-client-repo-2.6-0.fc24.noarch.rpm
+       - http://yum.spacewalkproject.org/2.7-client/Fedora/26/x86_64/spacewalk-client-repo-2.7-2.fc26.noarch.rpm
      when: ansible_distribution == "Fedora" and ansible_distribution_major_version == '24'
 
-   - name: Install Spacewalk nightly-client package
-     shell: "yum -y copr enable @spacewalkproject/nightly-client"
-     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '7'
+#   - name: Install Spacewalk nightly-client package
+#     shell: "yum -y copr enable @spacewalkproject/nightly-client"
+#     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '7'
 
 
-   - name: Install Spacewalk nightly-client package
-     shell: "dnf copr enable @spacewalkproject/nightly-client"
-     when: ansible_distribution == "Fedora"
+#   - name: Install Spacewalk nightly-client package
+#     shell: "dnf copr enable @spacewalkproject/nightly-client"
+#     when: ansible_distribution == "Fedora"
 
 #   - name: Enable nightly repo
 #     lineinfile: dest="{{ item.dest }}" regexp="{{ item.regexp }}"  line="{{ item.line }}" state=present
