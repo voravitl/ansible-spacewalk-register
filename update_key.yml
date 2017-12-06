@@ -16,12 +16,13 @@
      with_items:
        - epel-release
        - yum-plugin-copr
-     when: ansible_distribution == "CentOS"  and ansible_distribution_major_version =='7' or ansible_distribution == "Fedora"
+     when: ansible_distribution == "CentOS"  and ansible_distribution_major_version =='7'
 
    - name: Install epel-release and  (Centos)
      yum: state=present name={{item}} disable_gpg_check=yes
      with_items:
        - epel-release
+       - https://copr-be.cloud.fedoraproject.org/results/@spacewalkproject/nightly-client/epel-6-x86_64/00599358-spacewalk-repo/spacewalk-client-repo-2.8-6.el6.noarch.rpm
      when: ansible_distribution == "CentOS"   and ansible_distribution_major_version =='6'
 
    - name: Install repository Spacewalk-Client (CentOS 5 )
@@ -56,6 +57,7 @@
        - rhncfg
        - rhncfg-client
        - dnf-plugin-spacewalk
+       - http://{{ spacewalk_server }}/pub/rhn-org-trusted-ssl-cert-1.0-4.noarch.rpm
      when: ansible_distribution == "Fedora" 
 
    - name: Install Package for (Centos)
