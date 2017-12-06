@@ -8,7 +8,6 @@
      yum: state=removed name={{item}}
      with_items:
        - spacewalk-client-repo
-       - rhn-org-trusted-ssl-cert
      when: ansible_distribution == "CentOS"
      ignore_errors: yes
  
