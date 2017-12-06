@@ -68,7 +68,7 @@
      when: ansible_distribution == "Fedora" 
 
    - name: Install Package for (Centos)
-     yum: state=latest name={{item}}
+     yum: state=latest name={{item}} update_cache=yes
      with_items:
        - rhn-client-tools
        - rhn-check
