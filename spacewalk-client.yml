@@ -49,29 +49,29 @@
      when: ansible_distribution == "Ubuntu" #and ansible_distribution_major_version =='14' and ansible_userspace_architecture == 'x86_64'
  
    - name: Install repository Spacewalk-Client (CentOS  and Fedora )
-     yum: state=present name={{item}} disable_gpg_check=yes
+     yum: state=present name={{item}} disable_gpg_check=yes update_cache=yes
      with_items:
        - epel-release
        - yum-plugin-copr
-     when: ansible_distribution == "CentOS"  and ansible_distribution_major_version =='7' or ansible_distribution == "Fedora"
-
+     when: ansible_distribution == "CentOS"  and ansible_distribution_major_version =='7'
+     
    - name: Install epel-release and  (Centos)
-     yum: state=present name={{item}} disable_gpg_check=yes
+     yum: state=present name={{item}} disable_gpg_check=yes update_cache=yes
      with_items:
        - epel-release
      when: ansible_distribution == "CentOS"   and ansible_distribution_major_version =='6'
 
-#   - name: Install repository Spacewalk-Client (Centos 6)
-#     yum: state=present name={{item}} disable_gpg_check=yes
-#     with_items:
-#       - http://yum.spacewalkproject.org/2.7-client/RHEL/6/x86_64/spacewalk-client-repo-2.7-2.el6.noarch.rpm
-#     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '6'
+   - name: Install repository Spacewalk-Client (Centos 6)
+     yum: state=present name={{item}} disable_gpg_check=yes
+     with_items:
+       - http://yum.spacewalkproject.org/2.7-client/RHEL/6/x86_64/spacewalk-client-repo-2.7-2.el6.noarch.rpm
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '6'
 
-#   - name: Install repository Spacewalk-Client (Centos 7)
-#     yum: state=present name={{item}} disable_gpg_check=yes
-#     with_items:
-#       - http://yum.spacewalkproject.org/2.7-client/RHEL/7/x86_64/spacewalk-client-repo-2.7-2.el7.noarch.rpm
-#     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '7'
+   - name: Install repository Spacewalk-Client (Centos 7)
+     yum: state=present name={{item}} disable_gpg_check=yes
+     with_items:
+       - http://yum.spacewalkproject.org/2.7-client/RHEL/7/x86_64/spacewalk-client-repo-2.7-2.el7.noarch.rpm
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '7'
 
    - name: Install repository Spacewalk-Client (CentOS 5 )
      yum: state=present name={{item}} disable_gpg_check=yes
@@ -80,19 +80,19 @@
        - http://yum.spacewalkproject.org/2.7-client/RHEL/5/x86_64/spacewalk-client-repo-2.7-2.el5.noarch.rpm
      when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '5'
 
-#   - name: Install repository Spacewalk-Client (Fedora 24 )
-#     yum: state=present name={{item}} disable_gpg_check=yes
-#     with_items:
-#       - http://yum.spacewalkproject.org/2.7-client/Fedora/26/x86_64/spacewalk-client-repo-2.7-2.fc26.noarch.rpm
-#     when: ansible_distribution == "Fedora" and ansible_distribution_major_version == '24'
+   - name: Install repository Spacewalk-Client (Fedora 24 )
+     yum: state=present name={{item}} disable_gpg_check=yes
+     with_items:
+       - http://yum.spacewalkproject.org/2.7-client/Fedora/26/x86_64/spacewalk-client-repo-2.7-2.fc26.noarch.rpm
+     when: ansible_distribution == "Fedora" and ansible_distribution_major_version == '24'
 
-   - name: Install Spacewalk nightly-client package
-     shell: "yum -y copr enable @spacewalkproject/nightly-client"
-     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '7' or ansible_distribution_major_version == '6'
+#   - name: Install Spacewalk nightly-client package
+#     shell: "yum -y copr enable @spacewalkproject/nightly-client"
+#     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '7' or ansible_distribution_major_version == '6'
 
-   - name: Install Spacewalk nightly-client package
-     shell: "dnf copr enable @spacewalkproject/nightly-client"
-     when: ansible_distribution == "Fedora"
+#   - name: Install Spacewalk nightly-client package
+#     shell: "dnf -y copr enable @spacewalkproject/nightly-client"
+#     when: ansible_distribution == "Fedora"
 
 #   - name: Enable nightly repo
 #     lineinfile: dest="{{ item.dest }}" regexp="{{ item.regexp }}"  line="{{ item.line }}" state=present
@@ -118,6 +118,7 @@
        - rhncfg
        - rhncfg-client
        - dnf-plugin-spacewalk
+       - http://{{ spacewalk_server }}/pub/rhn-org-trusted-ssl-cert-1.0-2.noarch.rpm
      when: ansible_distribution == "Fedora" 
 
    - name: Install Package for (Centos)
@@ -161,7 +162,6 @@
    - name: Register system to Spacewalk (CentOS 5 x86_64)
      shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-centos5-x86_64 --force
      when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='5' and ansible_userspace_architecture == 'x86_64'
-
 
    - name: Register system to Spacewalk (Fedora 24 x86_64)
      shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-fedora24-x86_64 --force
