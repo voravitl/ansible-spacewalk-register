@@ -39,13 +39,19 @@
        - http://yum.spacewalkproject.org/2.7-client/RHEL/5/x86_64/spacewalk-client-repo-2.7-2.el5.noarch.rpm
      when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '5'
 
-   - name: Install Spacewalk nightly-client package
-     shell: "yum -y copr enable @spacewalkproject/nightly-client"
-     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '7'
+#   - name: Install Spacewalk nightly-client package
+#     shell: "yum -y copr enable @spacewalkproject/nightly-client"
+#     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '7'
 
-   - name: Install Spacewalk nightly-client package
-     shell: "dnf -y copr enable @spacewalkproject/nightly-client"
-     when: ansible_distribution == "Fedora"
+#   - name: Install Spacewalk nightly-client package
+#     shell: "dnf -y copr enable @spacewalkproject/nightly-client"
+#     when: ansible_distribution == "Fedora"
+
+   - name: Install repository Spacewalk-Client (Centos 7)
+     yum: state=present name={{item}} disable_gpg_check=yes
+     with_items:
+       - http://yum.spacewalkproject.org/2.7-client/RHEL/7/x86_64/spacewalk-client-repo-2.7-2.el7.noarch.rpm
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '7'
 
    - name: Clean matada yum
      shell: yum clean all ; ntpdate -u ntp.vpls.net
@@ -114,3 +120,10 @@
    - name: Enable rhn-actions-control
      shell: rhn-actions-control --enable-all
      when: ansible_distribution == "CentOS" or ansible_distribution == "Fedora"
+     
+   - name: Cleanup Package for CentOS
+     yum: state=removed name={{item}}
+     with_items:
+       - spacewalk-client-repo
+     when: ansible_distribution == "CentOS"
+     ignore_errors: yes
