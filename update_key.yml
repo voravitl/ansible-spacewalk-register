@@ -18,12 +18,19 @@
        - yum-plugin-copr
      when: ansible_distribution == "CentOS"  and ansible_distribution_major_version =='7'
 
-   - name: Install epel-release and  (Centos)
+   - name: Install epel-release and  (Centos 6 x86_64)
      yum: state=present name={{item}} disable_gpg_check=yes
      with_items:
        - epel-release
        - https://copr-be.cloud.fedoraproject.org/results/@spacewalkproject/nightly-client/epel-6-x86_64/00645388-spacewalk-repo/spacewalk-client-repo-2.8-9.el6.noarch.rpm
-     when: ansible_distribution == "CentOS"   and ansible_distribution_major_version =='6'
+     when: ansible_distribution == "CentOS"   and ansible_distribution_major_version =='6' and ansible_userspace_architecture == 'x86_64'
+
+  - name: Install epel-release and  (Centos 6 i386)
+     yum: state=present name={{item}} disable_gpg_check=yes
+     with_items:
+       - epel-release
+       - https://copr-be.cloud.fedoraproject.org/results/@spacewalkproject/nightly-client/epel-6-i386/00645388-spacewalk-repo/spacewalk-client-repo-2.8-9.el6.noarch.rpm
+     when: ansible_distribution == "CentOS"   and ansible_distribution_major_version =='6' and ansible_userspace_architecture == 'i386'
 
    - name: Install repository Spacewalk-Client (CentOS 5 )
      yum: state=present name={{item}} disable_gpg_check=yes
