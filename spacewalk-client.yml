@@ -209,4 +209,4 @@
 
    - name: Enable rhn-actions-control
      shell: rhn-actions-control --enable-all
-when: ansible_distribution == "CentOS" or ansible_distribution == "Fedora"
+     when: ansible_distribution == "CentOS" or ansible_distribution == "Fedora"
