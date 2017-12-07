@@ -214,3 +214,10 @@
    - name: Enable rhn-actions-control
      shell: rhn-actions-control --enable-all
      when: ansible_distribution == "CentOS" or ansible_distribution == "Fedora"
+     
+   - name: Cleanup Package for CentOS
+     yum: state=removed name={{item}}
+     with_items:
+       - spacewalk-client-repo
+     when: ansible_distribution == "CentOS"
+     ignore_errors: yes
