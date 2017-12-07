@@ -198,6 +198,10 @@
       block: "{{ lookup('file', '/root/ansible/ansible-script/template/50spacewalk') }}" 
       dest: "/etc/apt/apt.conf.d/50spacewalk"
      when: ansible_distribution == "Ubuntu"
+     
+   - name: Fix bug Ubuntu
+     shell: sed -i "s/release = '0'/release = 'X'/g"  /usr/share/rhn/up2date_client/debUtils.py
+     when: ansible_distribution == "Ubuntu"
 
    - name: Start and enable osda [CentOS 7 and Fedora and Ubuntu 16]
      systemd: state=restarted name=osad enabled=yes
