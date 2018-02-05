@@ -195,7 +195,7 @@
 
    - name: Ignore auth from spacewalk (Ubuntu)
      blockinfile:
-      block: "{{ lookup('file', '/root/ansible/ansible-script/template/50spacewalk') }}" 
+      block: "{{ lookup('file', './template/50spacewalk') }}" 
       dest: "/etc/apt/apt.conf.d/50spacewalk"
      when: ansible_distribution == "Ubuntu"
      
