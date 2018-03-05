@@ -120,7 +120,7 @@
        - rhncfg
        - rhncfg-client
        - dnf-plugin-spacewalk
-       - http://{{ spacewalk_server }}/pub/rhn-org-trusted-ssl-cert-1.0-4.noarch.rpm
+       - https://{{ spacewalk_server }}/pub/rhn-org-trusted-ssl-cert-1.0-3.noarch.rpm
      when: ansible_distribution == "Fedora" 
 
    - name: Install Package for (Centos)
@@ -136,7 +136,7 @@
        - osad
        - rhncfg
        - rhncfg-client
-       - http://{{ spacewalk_server }}/pub/rhn-org-trusted-ssl-cert-1.0-4.noarch.rpm
+       - http://{{ spacewalk_server }}/pub/rhn-org-trusted-ssl-cert-1.0-3.noarch.rpm
      when: ansible_distribution == "CentOS" #or ansible_distribution == "Fedora"
 
    - name: Install KEY 
