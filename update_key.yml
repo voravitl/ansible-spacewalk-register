@@ -5,9 +5,7 @@
   remote_user: root
   tasks:
    - name: Cleanup Package for CentOS
-     yum: state=removed name={{item}}
-     with_items:
-       - rhn-org-trusted-ssl-cert
+     shell: rpm -e rhn-org-trusted-ssl-cert
      when: ansible_distribution == "CentOS"
      
    - name: Cleanup Package for CentOS
