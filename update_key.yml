@@ -15,7 +15,7 @@
      when: ansible_distribution == "CentOS"
      
    - name: Install KEY 
-     get_url: url=https://{{spacewalk_server}}/pub/RHN-ORG-TRUSTED-SSL-CERT dest=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT validate_certs=no
+     get_url: url=https://"{{ spacewalk_server }}"/pub/RHN-ORG-TRUSTED-SSL-CERT dest=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT validate_certs=no
      when: ansible_distribution == "Ubuntu"
    
    - name: Register system to Spacewalk (CentOS 7 x86_64)
