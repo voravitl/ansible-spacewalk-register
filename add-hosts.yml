@@ -7,10 +7,8 @@
      block: "{{ lookup('file', './template/add_hosts') }}"
      dest: "/etc/hosts"
      backup: yes
-     when internal_ip_allow == "YES"
   - name: Add Hosts Public IP
     blockinfile:
      block: "{{ lookup('file', './template/add_hosts_pub-ip') }}"
      dest: "/etc/hosts"
      backup: yes
-     when internal_ip_allow == "NO"
