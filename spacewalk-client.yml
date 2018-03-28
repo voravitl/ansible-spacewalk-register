@@ -169,10 +169,14 @@
      shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-fedora24-x86_64 --force
      when: ansible_distribution == "Fedora" and ansible_distribution_major_version =='24' and ansible_userspace_architecture == 'x86_64'
 
+   - name: Register system to Spacewalk (Ubuntu 12 x86_64)
+     shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-ubuntu-12.04-precise-amd64 --force
+     when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='12' and ansible_userspace_architecture == 'x86_64'
+
+
    - name: Register system to Spacewalk (Ubuntu 14 x86_64)
      shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-ubuntu-14.04-trusty-amd64 --force
      when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='14' and ansible_userspace_architecture == 'x86_64'
-     ignore_errors: yes
 
    - name: Register system to Spacewalk (Ubuntu 16 x86_64)
      shell: rhnreg_ks --serverUrl=https://"{{ spacewalk_server }}"/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey=1-ubuntu-16.04-xenial-amd64 --force
