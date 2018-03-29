@@ -37,7 +37,7 @@
      when: ansible_distribution == "Ubuntu"
      
    - name: Install repo for spacewalk
-     shell: echo -e "deb http://ppa.launchpad.net/mj-casalogic/spacewalk-ubuntu/ubuntu precise main\ndeb-src http://ppa.launchpad.net/mj-casalogic/spacewalk-ubuntu/ubuntu precise main " > /etc/apt/sources.list.d/lsm
+     shell: echo -e "deb http://ppa.launchpad.net/mj-casalogic/spacewalk-ubuntu/ubuntu precise main\ndeb-src http://ppa.launchpad.net/mj-casalogic/spacewalk-ubuntu/ubuntu precise main " > /etc/apt/sources.list.d/lsm.list
      when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='12'
              
    - name: Install Package Spacewalk Clien for ubuntu 12.04
