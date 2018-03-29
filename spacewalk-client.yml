@@ -35,8 +35,25 @@
      with_items:
        - /etc/apt/sources.list.d/spacewalk.list
      when: ansible_distribution == "Ubuntu"
+     
+   - name: Install repo for spacewalk
+     shell: echo "deb http://ppa.launchpad.net/mj-casalogic/spacewalk-ubuntu/ubuntu precise main 
+                  deb-src http://ppa.launchpad.net/mj-casalogic/spacewalk-ubuntu/ubuntu precise main " > /etc/apt/sources.list.d/lsm
+     when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='12'
+             
+   - name: Install Package Spacewalk Clien for ubuntu 12.04
+     apt: deb="{{item}}" state=present update_cache=yes
+     with_items:
+       - pyjabber
+       - osad
+       - apt-transport-spacewalk
+       - rhn-client-tools 
+       - rhncfg 
+       - rhnlib 
+     when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='14' or ansible_distribution_major_version =='16'
+ 
    
-   - name: Install Package Spacewalk Clien for ubuntu
+   - name: Install Package Spacewalk Clien for ubuntu 14 or 16 
      apt: deb="{{item}}" state=present update_cache=yes
      with_items:
        - https://launchpad.net/~mj-casalogic/+archive/ubuntu/spacewalk-ubuntu/+files/pyjabber_0.5.0-1.4ubuntu3~xenial2_all.deb
@@ -46,7 +63,7 @@
        - http://ftp.us.debian.org/debian/pool/main/r/rhnlib/python-rhn_2.5.72-1_all.deb
        - http://ftp.us.debian.org/debian/pool/main/p/python-ethtool/python-ethtool_0.12-1.1_amd64.deb
        - http://ftp.us.debian.org/debian/pool/main/r/rhnsd/rhnsd_5.0.4-3+b1_amd64.deb
-     when: ansible_distribution == "Ubuntu" #and ansible_distribution_major_version =='14' and ansible_userspace_architecture == 'x86_64'
+     when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='14' or ansible_distribution_major_version =='16'
  
    - name: Install repository Spacewalk-Client (CentOS  and Fedora )
      yum: state=present name={{item}} disable_gpg_check=yes update_cache=yes
