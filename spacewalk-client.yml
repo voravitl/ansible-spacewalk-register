@@ -50,7 +50,7 @@
        - rhn-client-tools 
        - rhncfg 
        - rhnlib 
-     when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='14' or ansible_distribution_major_version =='16'
+     when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='12'
  
    
    - name: Install Package Spacewalk Clien for ubuntu 14 or 16 
