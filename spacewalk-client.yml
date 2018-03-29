@@ -42,7 +42,7 @@
      when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='12'
              
    - name: Install Package Spacewalk Clien for ubuntu 12.04
-     apt: name="{{item}}" state=present update_cache=yes
+     apt: name="{{item}}" state=present update_cache=yes force=yes
      with_items:
        - pyjabber
        - osad
