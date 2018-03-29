@@ -28,6 +28,7 @@
        - rhnsd
        - osad
        - pyjabber
+       - rhn-client-tools
      when: ansible_distribution == "Ubuntu"
 
    - name: Clenaup Old Config
