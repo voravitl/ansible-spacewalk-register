@@ -47,8 +47,7 @@
        - osad
        - apt-transport-spacewalk
        - rhn-client-tools 
-       - rhncfg 
-       - rhnlib 
+       - rhncfg  
      when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='12'
  
    
