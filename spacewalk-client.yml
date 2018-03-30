@@ -247,13 +247,19 @@
      shell: sed -i "s/release = '0'/release = 'X'/g"  /usr/share/rhn/up2date_client/debUtils.py
      when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
-   - name: Start and enable osda [CentOS 7 and Fedora and Ubuntu 16]
-     systemd: state=restarted name=osad enabled=yes
-     when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='7' or  ansible_distribution == "Fedora" and ansible_distribution_major_version =='24' or ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='16' oransible_distribution == "Debian" and ansible_distribution_major_version =='9' 
+   - name: Start and enable osad [CentOS 7 and Fedora and Ubuntu 16]
+     systemd: state=restarted name={{item}} enabled=yes
+     with_items:
+       - rhnsd
+       - osad
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version =='7' or  ansible_distribution == "Fedora" and ansible_distribution_major_version =='24' or ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='16'
 
    - name: Start and enable osad [CentOS 6 and Ubuntu 14]
-     service: state=restarted name=osad enabled=yes
-     when: ansible_distribution == "CentOS" and ansible_distribution_major_version <= '6' or ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='14' or  ansible_distribution == "Debian " and ansible_distribution_major_version <= '7'
+     service: state=restarted name={{item}} enabled=yes
+     with_items:
+       - rhnsd
+       - osad
+     when: ansible_distribution == "CentOS" and ansible_distribution_major_version <= '6' or ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='14'
 
    - name: Enable rhn-actions-control
      shell: rhn-actions-control --enable-all
