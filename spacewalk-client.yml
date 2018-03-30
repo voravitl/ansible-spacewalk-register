@@ -47,13 +47,7 @@
        - apt-transport-spacewalk
        - rhnsd
      when: ansible_distribution == "Debian"
-     
-   - name: Install Package Spacewalk Clien for Debian
-     apt: deb="{{item}}" state=present update_cache=yes
-     with_items:
-       - http://miroslav.suchy.cz/spacewalk/debian/dists/spacewalk-unstable/binary-amd64/jabberpy_0.5-1_all.deb
-       - http://miroslav.suchy.cz/spacewalk/debian/dists/spacewalk-unstable/binary-amd64/osad_5.9.21-2_all.deb
-     when: ansible_distribution == "Debian"
+    
  
    - name: Install Package Spacewalk Clien for ubuntu 12.04
      apt: name="{{item}}" state=present update_cache=yes force=yes
