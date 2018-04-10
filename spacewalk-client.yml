@@ -59,7 +59,7 @@
        - https://launchpad.net/~mj-casalogic/+archive/ubuntu/spacewalk-ubuntu/+files/pyjabber_0.5.0-1.4ubuntu3~precise1_all.deb
      when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='12'
      
-    - name: Install Package Spacewalk Clien for Ubuntu 12 osad
+   - name: Install Package Spacewalk Clien for Ubuntu 12 osad
      apt: name="{{item}}" state=present update_cache=yes force=yes
      with_items:
        - osad
