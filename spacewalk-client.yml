@@ -50,7 +50,7 @@
     
  
    - name: Install Package Spacewalk Clien for Ubuntu 12
-     apt: deb="{{item}}" state=present update_cache=yes
+     apt: deb="{{item}}" state=present update_cache=yes force=yes
      with_items:
        - http://lsm.lax10.vpls.net/pub/ubuntu12/apt-transport-spacewalk_1.0.6-4.1_all.deb
        - http://lsm.lax10.vpls.net/pub/ubuntu12/python-rhn_2.5.72-1_all.deb
