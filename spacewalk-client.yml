@@ -49,17 +49,22 @@
      when: ansible_distribution == "Debian"
     
  
-   - name: Install Package Spacewalk Clien for ubuntu 12.04
+   - name: Install Package Spacewalk Clien for Ubuntu 12
+     apt: deb="{{item}}" state=present update_cache=yes
+     with_items:
+       - http://lsm.lax10.vpls.net/pub/ubuntu12/apt-transport-spacewalk_1.0.6-4.1_all.deb
+       - http://lsm.lax10.vpls.net/pub/ubuntu12/python-rhn_2.5.72-1_all.deb
+       - http://lsm.lax10.vpls.net/pub/ubuntu12/rhn-client-tools_2.3.5-1_amd64.deb
+       - http://lsm.lax10.vpls.net/pub/ubuntu12/rhnsd_5.0.4-3_amd64.deb
+       - https://launchpad.net/~mj-casalogic/+archive/ubuntu/spacewalk-ubuntu/+files/pyjabber_0.5.0-1.4ubuntu3~precise1_all.deb
+     when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='12'
+     
+    - name: Install Package Spacewalk Clien for Ubuntu 12 osad
      apt: name="{{item}}" state=present update_cache=yes force=yes
      with_items:
-       - pyjabber
        - osad
-       - apt-transport-spacewalk
-       - rhn-client-tools 
-       - rhncfg  
-       - python-libxml2
      when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='12'
- 
+
    
    - name: Install Package Spacewalk Clien for ubuntu 14 or 16 
      apt: deb="{{item}}" state=present update_cache=yes
