@@ -64,6 +64,7 @@
      with_items:
        - osad
        - python-all-dev
+       - python-libxml2
      when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version =='12'
 
    
